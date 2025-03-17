@@ -1,4 +1,4 @@
-from  rest_framework import viewsets
+from  rest_framework import viewsets,generics
 from .models import Task 
 from .serializers import TaskSerializer
 from django.http import JsonResponse
@@ -33,3 +33,14 @@ def update_task(request, task_id):
             return JsonResponse({"error": "Task not found"}, status=404)
 
     return JsonResponse({"error": "Invalid request"}, status=400)
+
+
+class TaskListCreate(generics.ListCreateAPIView):
+    queryset=Task.objects.all()
+    serializer_class=TaskSerializer
+
+
+
+class TaskDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset=Task.objects.all()
+    serializer_class=TaskSerializer

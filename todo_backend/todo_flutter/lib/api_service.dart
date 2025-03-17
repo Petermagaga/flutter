@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'task_model.dart';
 
 class ApiService {
-  final String baseUrl = 'http:// 192.168.100.167/api/tasks/';
+  final String baseUrl = "http://127.0.0.1:8000/api/tasks/";
 
   /// Fetch all tasks
   Future<List<Task>> fetchTasks() async {
@@ -34,23 +34,33 @@ class ApiService {
 
   /// Update a task (mark complete/incomplete)
   Future<void> updateTaskStatus(int id, bool completed, String title) async {
-  final String url = '$baseUrl$id/';  // Ensure trailing slash
+    final String url = '$baseUrl$id/'; // Ensure trailing slash
 
-  final response = await http.put(
-    Uri.parse(url),
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: jsonEncode({
-      "title": title,   // Include title in the request
-      "completed": completed,  
-    }),
+    final response = await http.put(
+      Uri.parse(url),
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode({
+        "title": title, // Include title in the request
+        "completed": completed,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      print("✅ Task Updated Successfully");
+    } else {
+      print("❌ Error: ${response.statusCode}, Response: ${response.body}");
+    }
+  }
+Future<void> deleteTask(int id) async {
+  final response = await http.delete(
+    Uri.parse('$baseUrl$id/'),
+    headers: {"Content-Type": "application/json"},
   );
 
-  if (response.statusCode == 200) {
-    print("✅ Task Updated Successfully");
-  } else {
-    print("❌ Error: ${response.statusCode}, Response: ${response.body}");
+  if (response.statusCode != 204) {
+    throw Exception('Failed to delete task');
   }
 }
+
+
 }
