@@ -65,7 +65,6 @@ class _TodoListScreenState extends State<TodoListScreen> {
             itemCount: snapshot.data!.length,
             itemBuilder: (context, index) {
               Task task = snapshot.data![index];
-
               return Card(
                 elevation: 3,
                 margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
